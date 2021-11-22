@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.NewPreguntaActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tvNewPregunta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:text="@string/nueva_pregunta"
+                android:textAlignment="center"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:ems="10"
+                android:hint="@string/txt_pregunta"
+                android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edtRespuesta1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:ems="10"
+                android:hint="@string/respuesta_a"
+                android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edtRespuesta2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:ems="10"
+                android:hint="@string/respuesta_b"
+                android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edtRespuesta3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:ems="10"
+                android:hint="@string/respuesta_c"
+                android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edtRespuesta4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:ems="10"
+                android:hint="@string/respuesta_d"
+                android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvCorrecta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:text="@string/txt_correcta"
+                android:textSize="20sp" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/radBtnA"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="true"
+                    android:text="@string/option_a"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/radBtnB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="@string/option_b"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/radBtnC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="@string/option_c"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/radBtnD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="@string/option_d"
+                    android:textSize="20sp" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvErrorRadGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:text="@string/respuesta_error_msg"
+                android:textColor="@color/design_default_color_error"
+                android:textSize="16sp" />
+
+            <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+                android:id="@+id/spCategoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:smsp_arrowSize="16sp"
+                app:smsp_errorTextSize="16sp"
+                app:smsp_floatingLabelColor="@android:color/primary_text_light"
+                app:smsp_floatingLabelSize="18sp"
+                app:smsp_hint="Categoria"
+                app:smsp_hintColor="#616161"
+                app:smsp_hintSize="20sp"
+                app:smsp_itemColor="@android:color/primary_text_light"
+                app:smsp_itemListColor="@android:color/primary_text_light"
+                app:smsp_itemListHintBackgroundColor="#808080"
+                app:smsp_itemListHintColor="#FFFFFF"
+                app:smsp_itemSize="20sp"
+                app:smsp_multilineError="false"
+                app:smsp_selectedItemListColor="#FF5252"
+                android:layout_margin="12dp"/>
+
+            <Button
+                android:id="@+id/btnGuardarPregunta"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:background="@color/gray"
+                android:text="@string/guardar_pregunta"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

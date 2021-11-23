@@ -1,4 +1,4 @@
-package com.misiontic.proyecto.Entities
+package com.misiontic.saber11.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

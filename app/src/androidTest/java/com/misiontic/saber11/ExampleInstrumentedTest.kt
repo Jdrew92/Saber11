@@ -1,4 +1,4 @@
-package com.misiontic.proyecto
+package com.misiontic.saber11
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

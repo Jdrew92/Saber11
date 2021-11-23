@@ -1,4 +1,4 @@
-package com.misiontic.proyecto.activities
+package com.misiontic.saber11.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,9 +9,9 @@ import android.util.Patterns
 import android.view.View
 import android.widget.*
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-import com.misiontic.proyecto.Entities.Usuario
-import com.misiontic.proyecto.R
-import com.misiontic.proyecto.database.Saber11Database
+import com.misiontic.saber11.entities.Usuario
+import com.misiontic.saber11.R
+import com.misiontic.saber11.database.Saber11Database
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*

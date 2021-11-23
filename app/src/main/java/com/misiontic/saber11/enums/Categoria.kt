@@ -1,4 +1,4 @@
-package com.misiontic.proyecto.Entities
+package com.misiontic.saber11.enums
 
 enum class Categoria(val value:String){
     LECTURA_CRITICA("Lectura Crítica"),

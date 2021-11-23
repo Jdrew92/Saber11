@@ -38,5 +38,6 @@
     <string name="option_a">A</string>
     <string name="categoria_error_msg">Debe seleccionar una categoria</string>
     <string name="respuesta_error_msg">Debe seleccionar una respuesta</string>
+    <string name="filter_by_category">Filtrar por Categoria</string>
 
 </resources>

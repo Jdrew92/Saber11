@@ -1,6 +1,6 @@
-package com.misiontic.proyecto.dao
+package com.misiontic.saber11.dao
 import androidx.room.*
-import com.misiontic.proyecto.Entities.Usuario
+import com.misiontic.saber11.entities.Usuario
 
 @Dao
 interface UsuarioDAO {

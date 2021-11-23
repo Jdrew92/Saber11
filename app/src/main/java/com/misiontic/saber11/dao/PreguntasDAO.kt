@@ -1,8 +1,7 @@
-package com.misiontic.proyecto.dao
+package com.misiontic.saber11.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.misiontic.proyecto.Entities.Pregunta
+import com.misiontic.saber11.entities.Pregunta
 
 
 @Dao

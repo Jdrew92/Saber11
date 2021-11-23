@@ -1,4 +1,4 @@
-package com.misiontic.proyecto.activities
+package com.misiontic.saber11.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,8 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.doBeforeTextChanged
-import com.misiontic.proyecto.R
-import com.misiontic.proyecto.database.Saber11Database
+import com.misiontic.saber11.R
+import com.misiontic.saber11.database.Saber11Database
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 

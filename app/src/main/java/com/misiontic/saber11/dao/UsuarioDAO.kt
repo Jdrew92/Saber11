@@ -16,7 +16,7 @@ interface UsuarioDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(u: Usuario): Long
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.IGNORE)
     suspend fun update(u: Usuario)
 
     @Delete

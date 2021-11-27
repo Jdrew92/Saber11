@@ -8,7 +8,7 @@
     <string name="txt_password">Contraseña</string>
     <string name="txt_repeat_password">Repetir Contraseña</string>
     <string name="txt_login">Iniciar Sesión</string>
-    <string name="txt_registrarse">Registrarse</string>
+    <string name="txt_registrarme">Registrarme con email</string>
     <string name="txt_registro">Registro de Usuario</string>
     <string name="blank_error_msg">Debe llenar este campo</string>
     <string name="email_error_msg">"No es un email válido"</string>
@@ -39,5 +39,11 @@
     <string name="categoria_error_msg">Debe seleccionar una categoria</string>
     <string name="respuesta_error_msg">Debe seleccionar una respuesta</string>
     <string name="filter_by_category">Filtrar por Categoria</string>
+    <string name="pregunta">Pregunta</string>
+    <string name="editar_pregunta">Editar Pregunta</string>
+    <string name="regresar">Regresar</string>
+    <string name="guardar_cambios">Guardar Cambios</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="buscar">Buscar</string>
 
 </resources>

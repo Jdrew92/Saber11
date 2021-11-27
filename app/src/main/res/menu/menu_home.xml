@@ -5,22 +5,22 @@
     <item
         android:id="@+id/app_bar_search"
         android:icon="@drawable/ic_search_black_24dp"
-        android:title="Buscar"
+        android:title="@string/buscar"
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView" />
+        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/itemNewCuestionario"
         android:icon="@drawable/ic_new_cuestionario"
         android:title="@string/nuevo_cuestionario"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/itemResultados"
         android:icon="@drawable/ic_resultados"
         android:title="@string/mis_resultados"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/itemLogout"
         android:icon="@drawable/ic_login"
         android:title="@string/cerrar_sesion"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|withText" />
 </menu>

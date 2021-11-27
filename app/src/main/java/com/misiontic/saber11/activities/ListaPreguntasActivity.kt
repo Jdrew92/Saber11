@@ -20,7 +20,7 @@ import com.misiontic.saber11.database.Saber11Database
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class ListaPreguntasActivity : AppCompatActivity() {
+class ListaPreguntasActivity : AppCompatActivity(), PreguntaAdapter.OnPreguntaClickListener {
     private lateinit var fabAddPregunta: FloatingActionButton
     private lateinit var adapter: PreguntaAdapter
     private lateinit var list: RecyclerView
@@ -41,14 +41,14 @@ class ListaPreguntasActivity : AppCompatActivity() {
 
 
         list = findViewById(R.id.list)
-        adapter = PreguntaAdapter(preguntas)
+        adapter = PreguntaAdapter(preguntas, this, rol)
 
         llm = LinearLayoutManager(this)
         list.layoutManager = llm
         list.adapter = adapter
         list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL))
 
-        updateList("")
+        updateList()
 
         when (rol) {
             "Estudiante" -> {
@@ -113,7 +113,7 @@ class ListaPreguntasActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    private fun updateList(categoria: String) {
+    private fun updateList(categoria: String = "") {
         val db = Saber11Database.getDatabase(this)
         val preguntaDao = db.preguntaDao()
         if (categoria.isEmpty()) {
@@ -148,7 +148,7 @@ class ListaPreguntasActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
-                updateList("")
+                updateList()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -164,6 +164,14 @@ class ListaPreguntasActivity : AppCompatActivity() {
         categorias.add(Categoria.CIENCIAS_NATURALES.value)
         categorias.add(Categoria.INGLES.value)
         spFiltro.item = categorias
+    }
+
+    override fun onPreguntaClick(id: Int, rol:String?) {
+        val intent = Intent(this,  DetallePreguntaActivity::class.java)
+        intent.putExtra("id", id)
+        intent.putExtra("rol", rol)
+        val requestCode = 0
+        startActivityForResult(intent, requestCode)
     }
 
 

@@ -17,24 +17,30 @@
         android:layout_marginBottom="31dp"
         app:srcCompat="@mipmap/icfes" />
 
-    <EditText
-        android:id="@+id/edtEmailLogin"
-        android:layout_width="297dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="19dp"
-        android:ems="10"
-        android:hint="@string/txt_email"
-        android:inputType="text|textEmailAddress"
-        android:textSize="20sp" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtEmailLogin"
+            android:layout_width="297dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="19dp"
+            android:ems="10"
+            android:hint="@string/txt_email"
+            android:inputType="text|textEmailAddress"
+            android:textSize="20sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/txt_password"
+        app:errorTextAppearance="@style/TextAppearance.AppCompat.Display1"
         app:hintEnabled="false"
         app:passwordToggleEnabled="true">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtPasswordLogin"
             android:layout_width="298dp"
             android:layout_height="wrap_content"
@@ -43,6 +49,7 @@
             android:ems="10"
             android:hint="@string/txt_password"
             android:inputType="textPassword"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textSize="20sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,23 +62,16 @@
         android:textColor="@color/design_default_color_error"
         android:visibility="gone" />
 
-    <CheckBox
-        android:id="@+id/chkRecordarPassword"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="19dp"
-        android:text="@string/txt_remember_password"
-        android:textSize="16sp" />
-
     <Button
         android:id="@+id/btnLogin"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
         android:layout_marginBottom="13dp"
         android:background="@color/indigo_dark"
         android:text="@string/txt_login"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/textView"
@@ -104,31 +104,15 @@
 
     <Button
         android:id="@+id/btnRegistro"
-        style="@style/Widget.MaterialComponents.Button"
+        style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="22dp"
         android:background="@color/indigo_primary"
-        android:text="@string/txt_registrarse"
-        android:textSize="20sp" />
-
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="146dp"
-        android:layout_height="114dp"
-        android:layout_marginBottom="19dp"
-        app:srcCompat="@mipmap/icon" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:text="@string/txt_registrarme"
+        android:textSize="16sp"
+        app:icon="@drawable/ic_mail" />
 
 
 </LinearLayout>

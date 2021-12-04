@@ -1,30 +1,39 @@
 package com.misiontic.saber11.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.*
-import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-import com.misiontic.saber11.enums.Categoria
-import com.misiontic.saber11.entities.Pregunta
+import android.widget.AdapterView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
 import com.misiontic.saber11.R
-import com.misiontic.saber11.database.Saber11Database
 import com.misiontic.saber11.databinding.ActivityNewPreguntaBinding
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.newFixedThreadPoolContext
-import kotlinx.coroutines.runBlocking
+import com.misiontic.saber11.entities.Pregunta
+import com.misiontic.saber11.enums.Categoria
+import com.misiontic.saber11.utils.Database
+import java.util.*
+import kotlin.collections.ArrayList
 
 class NewPreguntaActivity : AppCompatActivity() {
 
     private var categorias: ArrayList<Any> = ArrayList()
     private lateinit var newPreguntaBinding: ActivityNewPreguntaBinding
 
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         newPreguntaBinding = ActivityNewPreguntaBinding.inflate(layoutInflater)
         setContentView(newPreguntaBinding.root)
         initSpinner()
+
+        auth = Firebase.auth
+        Firebase.initialize(this)
 
         newPreguntaBinding.tvErrorRadGroup.visibility = View.GONE
 
@@ -51,44 +60,35 @@ class NewPreguntaActivity : AppCompatActivity() {
 
     private fun guardarPregunta() {
         if(allInfoIsFilled()) {
-            val db = Saber11Database.getDatabase(this)
-            val preguntaDao = db.preguntaDao()
             val correcta = when(newPreguntaBinding.rdGroupRespuestas.checkedRadioButtonId){
                 R.id.radBtnA -> getString(R.string.option_a)
                 R.id.radBtnB -> getString(R.string.option_b)
                 R.id.radBtnC -> getString(R.string.option_c)
                 else -> getString(R.string.option_d)
             }
-            val pregunta = Pregunta(0,
+            val pregunta = Pregunta(
+                UUID.randomUUID().toString(),
                 newPreguntaBinding.edtDescripcion.text.toString(),
                 newPreguntaBinding.edtRespuesta1.text.toString(),
                 newPreguntaBinding.edtRespuesta2.text.toString(),
                 newPreguntaBinding.edtRespuesta3.text.toString(),
                 newPreguntaBinding.edtRespuesta4.text.toString(),
                 correcta,
+                null,
                 newPreguntaBinding.spCategoria.selectedItem.toString()
             )
-            runBlocking {
-                launch {
-                    val result = preguntaDao.insert(pregunta)
-                    if(result != -1L){
-                        Toast.makeText(this@NewPreguntaActivity, "Se ha registrado con éxito!", Toast.LENGTH_LONG).show()
-                        val intent = Intent(this@NewPreguntaActivity, ListaPreguntasActivity::class.java)
-                        intent.putExtra("rol", getIntent().getStringExtra("rol"))
-                        setResult(RESULT_OK, intent)
-                        finish()
-                    }
-                }
-            }
+            Database.getPreguntasReference().child(pregunta.id!!).setValue(pregunta)
+            Toast.makeText(this, getString(R.string.registro_exitoso), Toast.LENGTH_LONG).show()
+            val intent = Intent(this,  ListaPreguntasActivity::class.java)
+            finish()
+            startActivity(intent)
         }
     }
 
     private fun initSpinner() {
-        categorias.add(Categoria.LECTURA_CRITICA.value)
-        categorias.add(Categoria.MATEMATICAS.value)
-        categorias.add(Categoria.SOCIALES_CIUDADANAS.value)
-        categorias.add(Categoria.CIENCIAS_NATURALES.value)
-        categorias.add(Categoria.INGLES.value)
+        for(categoria in Categoria.values()){
+            categorias.add(categoria.value)
+        }
         newPreguntaBinding.spCategoria.item = categorias
     }
 

@@ -1,15 +1,15 @@
 package com.misiontic.saber11.entities
 
-import androidx.room.*
+import java.io.Serializable
 
-@Entity
 data class Pregunta(
-    @PrimaryKey(autoGenerate = true) val id:Int,
-    val descripcion:String,
-    val respuesta1:String,
-    val respuesta2:String,
-    val respuesta3:String,
-    val respuesta4:String,
-    val correcta:String,
-    val categoria:String
-)
+    val id:String? = null,
+    val descripcion:String? = null,
+    val respuesta1:String? = null,
+    val respuesta2:String? = null,
+    val respuesta3:String? = null,
+    val respuesta4:String? = null,
+    val correcta:String? = null,
+    val marcada:String?=null,
+    val categoria:String? = null
+) : Serializable

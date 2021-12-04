@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "743718987099",
+    "project_id": "saber11-e7c27",
+    "storage_bucket": "saber11-e7c27.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743718987099:android:19d46b2b8aefc1ab92a67e",
+        "android_client_info": {
+          "package_name": "com.misiontic.saber11"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "743718987099-ddh9vca57hdlg33kq9c5f1intthjo526.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsxHa2jMc4icE4PjCoIMWQ0El4N72tG30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "743718987099-ddh9vca57hdlg33kq9c5f1intthjo526.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

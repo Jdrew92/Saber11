@@ -9,206 +9,225 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvDetalle"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_detalle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:text="@string/pregunta"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="28sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtDescripcionDetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:ems="10"
-                android:hint="@string/txt_pregunta"
-                android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
-                android:textSize="20sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtRespuesta1Detalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:ems="10"
-                android:hint="@string/respuesta_a"
-                android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
-                android:textSize="20sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtRespuesta2Detalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:ems="10"
-                android:hint="@string/respuesta_b"
-                android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
-                android:textSize="20sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtRespuesta3Detalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:ems="10"
-                android:hint="@string/respuesta_c"
-                android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
-                android:textSize="20sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtRespuesta4Detalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:ems="10"
-                android:hint="@string/respuesta_d"
-                android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
-                android:textSize="20sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvCorrectaDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:text="@string/txt_correcta"
-            android:textSize="20sp" />
-
-        <RadioGroup
-            android:id="@+id/rdGroupRespuestasDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:orientation="vertical">
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/radBtnADetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:checked="true"
-                android:text="@string/option_a"
-                android:textSize="20sp" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/radBtnBDetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="@string/option_b"
-                android:textSize="20sp" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/radBtnCDetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="@string/option_c"
-                android:textSize="20sp" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/radBtnDDetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="@string/option_d"
-                android:textSize="20sp" />
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/tvErrorRadGroupDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:text="@string/respuesta_error_msg"
-            android:textColor="@color/design_default_color_error"
-            android:textSize="16sp" />
-
-        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-            android:id="@+id/spCategoriaDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:layout_marginBottom="8dp"
-            app:smsp_arrowSize="16sp"
-            app:smsp_errorTextSize="16sp"
-            app:smsp_floatingLabelColor="@android:color/primary_text_light"
-            app:smsp_floatingLabelSize="18sp"
-            app:smsp_hint="Categoria"
-            app:smsp_hintColor="#616161"
-            app:smsp_hintSize="20sp"
-            app:smsp_itemColor="@android:color/primary_text_light"
-            app:smsp_itemListColor="@android:color/primary_text_light"
-            app:smsp_itemListHintBackgroundColor="#808080"
-            app:smsp_itemListHintColor="#FFFFFF"
-            app:smsp_itemSize="20sp"
-            app:smsp_multilineError="false"
-            app:smsp_selectedItemListColor="#FF5252" />
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:menu="@menu/menu_detalle" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="12dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnEditar"
-                style="@style/Widget.MaterialComponents.Button"
+            <TextView
+                android:id="@+id/tvDetalle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:elevation="2dp"
-                android:padding="12dp"
-                android:text="@string/editar_pregunta"
-                android:textSize="20sp"
-                app:backgroundTint="?attr/colorPrimary"
-                app:shapeAppearance="?attr/shapeAppearanceSmallComponent"
-                app:strokeWidth="0dp" />
+                android:layout_margin="12dp"
+                android:text="@string/pregunta"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnBack"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtDescripcionDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:ems="10"
+                    android:hint="@string/txt_pregunta"
+                    android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtRespuesta1Detalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:ems="10"
+                    android:hint="@string/respuesta_a"
+                    android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtRespuesta2Detalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:ems="10"
+                    android:hint="@string/respuesta_b"
+                    android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtRespuesta3Detalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:ems="10"
+                    android:hint="@string/respuesta_c"
+                    android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtRespuesta4Detalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:ems="10"
+                    android:hint="@string/respuesta_d"
+                    android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvCorrectaDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:text="@string/txt_correcta"
+                android:textSize="20sp" />
+
+            <RadioGroup
+                android:id="@+id/rdGroupRespuestasDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/radBtnADetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="true"
+                    android:text="@string/option_a"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/radBtnBDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="@string/option_b"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/radBtnCDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="@string/option_c"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/radBtnDDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="@string/option_d"
+                    android:textSize="20sp" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvErrorRadGroupDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:text="@string/respuesta_error_msg"
+                android:textColor="@color/design_default_color_error"
+                android:textSize="16sp" />
+
+            <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+                android:id="@+id/spCategoriaDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:layout_marginBottom="8dp"
+                app:smsp_arrowSize="16sp"
+                app:smsp_errorTextSize="16sp"
+                app:smsp_floatingLabelColor="@android:color/primary_text_light"
+                app:smsp_floatingLabelSize="18sp"
+                app:smsp_hint="Categoria"
+                app:smsp_hintColor="#616161"
+                app:smsp_hintSize="20sp"
+                app:smsp_itemColor="@android:color/primary_text_light"
+                app:smsp_itemListColor="@android:color/primary_text_light"
+                app:smsp_itemListHintBackgroundColor="#808080"
+                app:smsp_itemListHintColor="#FFFFFF"
+                app:smsp_itemSize="20sp"
+                app:smsp_multilineError="false"
+                app:smsp_selectedItemListColor="#FF5252" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="12dp"
-                android:text="@string/regresar"
-                android:textSize="20sp" />
-        </LinearLayout>
+                android:layout_margin="12dp"
+                android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/btnEditar"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:elevation="2dp"
+                    android:padding="12dp"
+                    android:text="@string/editar_pregunta"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    app:backgroundTint="?attr/colorPrimary"
+                    app:shapeAppearance="?attr/shapeAppearanceSmallComponent"
+                    app:strokeWidth="0dp"
+                    tools:visibility="visible" />
+
+                <Button
+                    android:id="@+id/btnBack"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="12dp"
+                    android:text="@string/regresar"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

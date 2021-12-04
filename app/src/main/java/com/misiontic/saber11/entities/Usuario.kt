@@ -1,15 +1,13 @@
 package com.misiontic.saber11.entities
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import java.io.Serializable
 
-@Entity
 data class Usuario(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    val nombres:String?,
-    val apellidos: String?,
-    val telefono:String?,
-    val email:String?,
-    val password:String?,
-    val rol:String?
-)
+    val id: String? = null,
+    val nombres:String? = null,
+    val apellidos: String? = null,
+    val telefono:String? = null,
+    val email:String? = null,
+    val password:String? = null,
+    val rol:String? = null
+): Serializable

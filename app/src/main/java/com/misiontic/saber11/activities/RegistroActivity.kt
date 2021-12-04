@@ -1,75 +1,63 @@
 package com.misiontic.saber11.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
-import android.widget.*
-import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-import com.misiontic.saber11.entities.Usuario
+import android.widget.AdapterView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.misiontic.saber11.R
-import com.misiontic.saber11.database.Saber11Database
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import com.misiontic.saber11.databinding.ActivityRegistroBinding
+import com.misiontic.saber11.entities.Usuario
+import com.misiontic.saber11.enums.Rol
+import com.misiontic.saber11.utils.Database
 import java.util.*
 import java.util.regex.Pattern
-import kotlin.collections.ArrayList
 
 class RegistroActivity : AppCompatActivity() {
 
-    private var roles:ArrayList<String> = ArrayList()
-    private var rol:String? = null
+    private var roles: MutableList<Any> = mutableListOf()
+    private var rol: String? = null
+    private lateinit var binding: ActivityRegistroBinding
+    private lateinit var auth: FirebaseAuth
 
-    private lateinit var edtEmail: EditText
-    private lateinit var edtNombres: EditText
-    private lateinit var edtApellidos: EditText
-    private lateinit var edtTelefono: EditText
-    private lateinit var edtPassword: EditText
-    private lateinit var edtPassword2: EditText
-    private lateinit var chkTerminos: CheckBox
-    private lateinit var tvErrorTerminos: TextView
-    private lateinit var spRol: SmartMaterialSpinner<String>
-    private lateinit var btnRegistrar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_registro)
+        binding = ActivityRegistroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        auth = Firebase.auth
 
         initSpinner()
 
-        edtEmail = findViewById(R.id.edtEmail)
-        edtNombres = findViewById(R.id.edtNombres)
-        edtApellidos = findViewById(R.id.edtApellidos)
-        edtTelefono = findViewById(R.id.edtTelefono)
-        edtPassword = findViewById(R.id.edtPassword)
-        edtPassword2 = findViewById(R.id.edtPassword2)
-        chkTerminos = findViewById(R.id.chkTerminos)
-        tvErrorTerminos = findViewById(R.id.tvErrorTerminos)
-        btnRegistrar = findViewById(R.id.btnRegistrar)
-        spRol = findViewById(R.id.spRol)
-        tvErrorTerminos.visibility = TextView.GONE
+        binding.tvErrorTerminos.visibility = TextView.GONE
 
-        spRol.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spRol.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
                 id: Long
             ) {
-                rol = spRol.selectedItem
-                spRol.errorText = null
+                rol = binding.spRol.selectedItem.toString()
+                binding.spRol.errorText = null
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                spRol.errorText = getString(R.string.rol_error_msg)
+                binding.spRol.errorText = getString(R.string.rol_error_msg)
             }
 
         }
 
-        edtEmail.addTextChangedListener(object : TextWatcher {
+        binding.edtEmail.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 isMailValid(s)
@@ -79,81 +67,87 @@ class RegistroActivity : AppCompatActivity() {
 
         })
 
-        edtPassword.addTextChangedListener(object : TextWatcher {
+        binding.edtPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!isValidPasswordFormat(s.toString())) {
-                    edtPassword.requestFocus()
-                    edtPassword.error = getString(R.string.password_not_valid_msg)
+                    binding.edtPassword.requestFocus()
+                    binding.edtPassword.error = getString(R.string.password_not_valid_msg)
                 }
             }
 
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        edtPassword2.addTextChangedListener(object : TextWatcher {
+        binding.edtPassword2.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!isValidPasswordFormat(s.toString())) {
-                    edtPassword2.requestFocus()
-                    edtPassword2.error = getString(R.string.password_not_valid_msg)
+                    binding.edtPassword2.requestFocus()
+                    binding.edtPassword2.error = getString(R.string.password_not_valid_msg)
                 }
-                if (!passwordMatches(edtPassword.text.toString(), s.toString())) {
-                    edtPassword2.requestFocus()
-                    edtPassword2.error = getString(R.string.does_not_match_passwords_msg)
+                if (!passwordMatches(binding.edtPassword.text.toString(), s.toString())) {
+                    binding.edtPassword2.requestFocus()
+                    binding.edtPassword2.error = getString(R.string.does_not_match_passwords_msg)
                 }
             }
 
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        chkTerminos.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) tvErrorTerminos.visibility = TextView.GONE
+        binding.chkTerminos.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) binding.tvErrorTerminos.visibility = TextView.GONE
         }
 
-        btnRegistrar.setOnClickListener {
+        binding.btnRegistrar.setOnClickListener {
             if (allInfoIsFilled()) {
-
-                val db = Saber11Database.getDatabase(this)
-                val usuarioDao = db.usuarioDao()
-                val usuario = Usuario(
-                    0, edtNombres.text.toString(),
-                    edtApellidos.text.toString(), edtTelefono.text.toString(),
-                    edtEmail.text.toString().trim().lowercase(), edtPassword.text.toString(),
-                rol)
-
-                runBlocking {
-                    launch {
-                        val emailSearched = usuarioDao.getUsuarioByEmail(edtEmail.text.toString())
-                        if(emailSearched.isNullOrBlank()){
-                            val result = usuarioDao.insert(usuario)
-                            if(result != -1L){
-                                Toast.makeText(this@RegistroActivity, "Se ha registrado con éxito!", Toast.LENGTH_LONG).show()
-                                val intent = Intent(this@RegistroActivity, MainActivity::class.java)
-                                finish()
-                                startActivity(intent)
-                            }
+                val email = binding.edtEmail.text.toString().trim().lowercase()
+                val password = binding.edtPassword.text.toString()
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            val user = auth.currentUser
+                            val usuario = Usuario(
+                                user!!.uid,
+                                binding.edtNombres.text.toString(),
+                                binding.edtApellidos.text.toString(),
+                                binding.edtTelefono.text.toString(),
+                                email,
+                                password,
+                                rol!!
+                            )
+                            Database.getUsuariosReference().child(usuario.id!!).setValue(usuario)
+                            Toast.makeText(
+                                this@RegistroActivity,
+                                getString(R.string.registro_exitoso),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            val intent = Intent(this@RegistroActivity, MainActivity::class.java)
+                            finish()
+                            startActivity(intent)
                         } else {
-                            edtEmail.requestFocus()
-                            edtEmail.error = getString(R.string.email_exist_error)
+                            Toast.makeText(
+                                baseContext,
+                                getString(R.string.registro_error), Toast.LENGTH_LONG
+                            ).show()
                         }
                     }
-                }
+
             }
         }
     }
 
     private fun initSpinner() {
-        spRol = findViewById(R.id.spRol)
-        roles.add("Docente")
-        roles.add("Estudiante")
-        spRol.item = roles
+        for (rol in Rol.values()) {
+            roles.add(rol.value)
+        }
+        binding.spRol.item = roles
     }
 
     private fun isMailValid(text: CharSequence?): Boolean {
         return if (text.isNullOrEmpty() || !Patterns.EMAIL_ADDRESS.matcher(text).matches()) {
-            edtEmail.requestFocus()
-            edtEmail.error = getString(R.string.email_error_msg)
+            binding.edtEmail.requestFocus()
+            binding.edtEmail.error = getString(R.string.email_error_msg)
             false
         } else {
             true
@@ -162,44 +156,44 @@ class RegistroActivity : AppCompatActivity() {
 
     private fun allInfoIsFilled(): Boolean {
         return when {
-            edtNombres.text.isNullOrEmpty() -> {
-                edtNombres.requestFocus()
-                edtNombres.error = getString(R.string.blank_error_msg)
+            binding.edtNombres.text.isNullOrEmpty() -> {
+                binding.edtNombres.requestFocus()
+                binding.edtNombres.error = getString(R.string.blank_error_msg)
                 false
             }
-            edtApellidos.text.isNullOrEmpty() -> {
-                edtApellidos.requestFocus()
-                edtApellidos.error = getString(R.string.blank_error_msg)
+            binding.edtApellidos.text.isNullOrEmpty() -> {
+                binding.edtApellidos.requestFocus()
+                binding.edtApellidos.error = getString(R.string.blank_error_msg)
                 false
             }
-            edtTelefono.text.isNullOrEmpty() -> {
-                edtTelefono.requestFocus()
-                edtTelefono.error = getString(R.string.blank_error_msg)
+            binding.edtTelefono.text.isNullOrEmpty() -> {
+                binding.edtTelefono.requestFocus()
+                binding.edtTelefono.error = getString(R.string.blank_error_msg)
                 false
             }
-            edtEmail.text.isNullOrEmpty() -> {
-                edtEmail.requestFocus()
-                edtEmail.error = getString(R.string.blank_error_msg)
+            binding.edtEmail.text.isNullOrEmpty() -> {
+                binding.edtEmail.requestFocus()
+                binding.edtEmail.error = getString(R.string.blank_error_msg)
                 false
             }
-            edtPassword.text.isNullOrEmpty() -> {
-                edtPassword.requestFocus()
-                edtPassword.error = getString(R.string.blank_error_msg)
+            binding.edtPassword.text.isNullOrEmpty() -> {
+                binding.edtPassword.requestFocus()
+                binding.edtPassword.error = getString(R.string.blank_error_msg)
                 false
             }
-            edtPassword2.text.isNullOrEmpty() -> {
-                edtPassword2.requestFocus()
-                edtPassword2.error = getString(R.string.blank_error_msg)
+            binding.edtPassword2.text.isNullOrEmpty() -> {
+                binding.edtPassword2.requestFocus()
+                binding.edtPassword2.error = getString(R.string.blank_error_msg)
                 false
             }
-            spRol.selectedItem.isNullOrEmpty() -> {
-                spRol.requestFocus()
-                spRol.errorText = getString(R.string.rol_error_msg)
+            binding.spRol.selectedItem.toString().isEmpty() -> {
+                binding.spRol.requestFocus()
+                binding.spRol.errorText = getString(R.string.rol_error_msg)
                 false
             }
-            !chkTerminos.isChecked -> {
-                chkTerminos.requestFocus()
-                tvErrorTerminos.visibility = TextView.VISIBLE
+            !binding.chkTerminos.isChecked -> {
+                binding.chkTerminos.requestFocus()
+                binding.tvErrorTerminos.visibility = TextView.VISIBLE
                 false
             }
             else -> {

@@ -1,65 +1,70 @@
 package com.misiontic.saber11.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doBeforeTextChanged
-import com.misiontic.saber11.R
-import com.misiontic.saber11.database.Saber11Database
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.misiontic.saber11.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var edtEmailLogin: EditText
-    private lateinit var edtPasswordLogin: EditText
-    private lateinit var tvLoginError: TextView
-    private lateinit var btnRegistrar: Button
-    private lateinit var btnLogin: Button
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var auth: FirebaseAuth
+    private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        edtEmailLogin = findViewById(R.id.edtEmailLogin)
-        edtPasswordLogin = findViewById(R.id.edtPasswordLogin)
-        tvLoginError = findViewById(R.id.tvLoginError)
-        btnLogin = findViewById(R.id.btnLogin)
-        btnRegistrar = findViewById(R.id.btnRegistro)
+        auth = Firebase.auth
 
-        btnLogin.setOnClickListener { login() }
+        binding.btnLogin.setOnClickListener { login() }
 
-        btnRegistrar.setOnClickListener {
+        binding.btnRegistro.setOnClickListener {
             val intent = Intent(this, RegistroActivity::class.java)
             startActivity(intent)
         }
-        edtEmailLogin.doBeforeTextChanged { text, start, count, after -> tvLoginError.visibility = View.GONE }
-        edtPasswordLogin.doBeforeTextChanged { text, start, count, after -> tvLoginError.visibility = View.GONE }
-    }
-
-    private fun login(){
-        val db = Saber11Database.getDatabase(this)
-        val usuarioDao = db.usuarioDao()
-        val email = edtEmailLogin.text.toString().trim().lowercase()
-        val password = edtPasswordLogin.text.toString()
-        runBlocking {
-            launch {
-                val usuario = usuarioDao.getUsuarioByEmailAndPassword(email, password)
-                if(usuario.isNotEmpty()){
-                    val intent = Intent(this@MainActivity, ListaPreguntasActivity::class.java)
-                    intent.putExtra("id", usuario.first().id)
-                    intent.putExtra("rol", usuario.first().rol)
-                    //println("${usuario.first().id}, ${usuario.first().rol}")
-                    finish()
-                    startActivity(intent)
-                } else {
-                    tvLoginError.visibility = View.VISIBLE
-                }
-            }
+        binding.edtEmailLogin.doBeforeTextChanged { _, _, _, _ ->
+            binding.tvLoginError.visibility = View.GONE
+        }
+        binding.edtPasswordLogin.doBeforeTextChanged { _, _, _, _ ->
+            binding.tvLoginError.visibility = View.GONE
         }
     }
+
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        Log.i(TAG,"currentUser onStart: $currentUser")
+        if (currentUser != null) {
+           toListaPreguntas()
+         }
+    }
+
+    private fun login() {
+        val email = binding.edtEmailLogin.text.toString().trim().lowercase()
+        val password = binding.edtPasswordLogin.text.toString()
+
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    toListaPreguntas()
+                } else {
+                    binding.tvLoginError.visibility = View.VISIBLE
+                }
+            }
+    }
+
+    private fun toListaPreguntas(){
+        val intent = Intent(this, ListaPreguntasActivity::class.java)
+        this.startActivity(intent)
+    }
+
 }

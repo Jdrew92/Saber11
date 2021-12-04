@@ -1,92 +1,109 @@
 package com.misiontic.saber11.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.misiontic.saber11.enums.Categoria
-import com.misiontic.saber11.entities.Pregunta
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
 import com.misiontic.saber11.R
 import com.misiontic.saber11.adapters.PreguntaAdapter
-import com.misiontic.saber11.database.Saber11Database
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import com.misiontic.saber11.databinding.ActivityListaPreguntasBinding
+import com.misiontic.saber11.entities.Pregunta
+import com.misiontic.saber11.entities.Usuario
+import com.misiontic.saber11.enums.Categoria
+import com.misiontic.saber11.enums.Rol
+import com.misiontic.saber11.utils.Database
 
-class ListaPreguntasActivity : AppCompatActivity(), PreguntaAdapter.OnPreguntaClickListener {
-    private lateinit var fabAddPregunta: FloatingActionButton
+
+class ListaPreguntasActivity : AppCompatActivity(), PreguntaAdapter.OnPreguntaClickListener,
+    NavigationView.OnNavigationItemSelectedListener {
+
     private lateinit var adapter: PreguntaAdapter
-    private lateinit var list: RecyclerView
     private lateinit var llm: LinearLayoutManager
-    private lateinit var spFiltro: SmartMaterialSpinner<String>
+    private lateinit var binding: ActivityListaPreguntasBinding
+    private lateinit var toggle: ActionBarDrawerToggle
+
+    private lateinit var auth: FirebaseAuth
 
     private var preguntas: ArrayList<Pregunta> = ArrayList()
-    private var categorias: ArrayList<String> = ArrayList()
+    private var categorias: ArrayList<Any> = ArrayList()
+    private var filtradas: ArrayList<Pregunta> = ArrayList()
+
+    private val TAG = "ListaPreguntasActivity"
+    private var user = mutableListOf<Usuario>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lista_preguntas)
+        binding = ActivityListaPreguntasBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val rol = intent.getStringExtra("rol")
-        fabAddPregunta = findViewById(R.id.fabAddPregunta)
-        setSupportActionBar(findViewById(R.id.toolbar))
+        setSupportActionBar(findViewById(R.id.toolbar_list_test))
+
+        toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.contentPreguntas.toolbarListPreguntas,
+            R.string.drawer_open,
+            R.string.drawer_closed
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
+
+        binding.navView.setNavigationItemSelectedListener(this)
+
+        auth = Firebase.auth
+        Firebase.initialize(this)
+        user.clear()
+        setRol()
         initSpinner()
-
-
-        list = findViewById(R.id.list)
-        adapter = PreguntaAdapter(preguntas, this, rol)
-
-        llm = LinearLayoutManager(this)
-        list.layoutManager = llm
-        list.adapter = adapter
-        list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL))
-
         updateList()
 
-        when (rol) {
-            "Estudiante" -> {
-                fabAddPregunta.visibility = View.GONE
-            }
-            "Docente" -> {
-                fabAddPregunta.visibility = View.VISIBLE
-                fabAddPregunta.setOnClickListener {
-                    val intent = Intent(this, NewPreguntaActivity::class.java)
-                    val requestCode = 0
-                    intent.putExtra("rol", rol)
-                    startActivityForResult(intent, requestCode)
+        binding.contentPreguntas.spFiltro.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    if (categorias[position] == "") {
+                        binding.contentPreguntas.spFiltro.clearSelection()
+                    }
+                    updateList(categorias[position].toString())
                 }
-            }
-            else -> {
-                val intent = Intent(this, MainActivity::class.java)
-                finish()
-                startActivity(intent)
-            }
-        }
 
-        spFiltro.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if (categorias[position].isEmpty()) {
-                    spFiltro.clearSelection()
-                }
-                updateList(categorias[position])
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+    }
 
-        }
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        toggle.syncState()
+    }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        toggle.onConfigurationChanged(newConfig)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -95,12 +112,8 @@ class ListaPreguntasActivity : AppCompatActivity(), PreguntaAdapter.OnPreguntaCl
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.itemLogout -> {
-                finish()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }
+        if (toggle.onOptionsItemSelected(item)) {
+            return true
         }
         return super.onOptionsItemSelected(item)
     }
@@ -113,66 +126,147 @@ class ListaPreguntasActivity : AppCompatActivity(), PreguntaAdapter.OnPreguntaCl
         super.onBackPressed()
     }
 
-    private fun updateList(categoria: String = "") {
-        val db = Saber11Database.getDatabase(this)
-        val preguntaDao = db.preguntaDao()
-        if (categoria.isEmpty()) {
-            runBlocking {
-                launch {
-                    val result = preguntaDao.getAllPreguntas()
-                    var i = 0
-                    preguntas.clear()
-                    while (i < result.size) {
-                        preguntas.add(result[i])
-                        i++
-                    }
-                    adapter.notifyDataSetChanged()
-                }
-            }
-        } else {
-            runBlocking {
-                launch {
-                    val result = preguntaDao.getPreguntasbyCategoria(categoria)
-                    var i = 0
-                    preguntas.clear()
-                    while (i < result.size) {
-                        preguntas.add(result[i])
-                        i++
-                    }
-                    adapter.notifyDataSetChanged()
-                }
-            }
-        }
+    //Funciones de Interfaces
+
+    override fun onPreguntaClick(pregunta: Pregunta) {
+        val intent = Intent(this, DetallePreguntaActivity::class.java)
+        intent.putExtra("usuario", user[0])
+        intent.putExtra("pregunta", pregunta)
+        startActivity(intent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                updateList()
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.test_navItem -> {
+                val intent = Intent(this, ListaTestsActivity::class.java)
+                intent.putExtra("usuario", user[0])
+                intent.putExtra("preguntas", preguntas)
+                finish()
+                startActivity(intent)
+            }
+            R.id.itemLogout -> {
+                Firebase.auth.signOut()
+                finish()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
         }
-        super.onActivityResult(requestCode, resultCode, data)
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+
+    //funciones privadas de operacion
+
+    private fun setRol() {
+        val usuarioListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val userMap = snapshot.value as Map<*, *>
+                val usuario = Usuario(
+                    userMap["id"].toString(),
+                    userMap["nombres"].toString(),
+                    userMap["apellidos"].toString(),
+                    null, null, null,
+                    userMap["rol"].toString()
+                )
+                user.add(usuario)
+                when (usuario.rol) {
+                    Rol.DOCENTE.value -> {
+                        binding.contentPreguntas.fabAddPregunta.visibility = View.VISIBLE
+                        binding.contentPreguntas.fabAddPregunta.setOnClickListener {
+                            val intent =
+                                Intent(this@ListaPreguntasActivity, NewPreguntaActivity::class.java)
+                            intent.putExtra("usuario", usuario)
+                            startActivity(intent)
+                        }
+                    }
+                    else -> {
+                        binding.contentPreguntas.fabAddPregunta.visibility = View.GONE
+                    }
+                }
+                findViewById<TextView>(R.id.tvNombreNav).text = getString(
+                    R.string.nombre_usuario,
+                    usuario.nombres,
+                    usuario.apellidos
+                )
+                findViewById<TextView>(R.id.tvRolNav).text =
+                    getString(R.string.rol_usuario, usuario.rol)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "onCancelled updateList: ", error.toException())
+            }
+
+        }
+        Database.getUsuariosReference().child(auth.currentUser!!.uid)
+            .addListenerForSingleValueEvent(usuarioListener)
+    }
+
+    private fun updateList(categoria: String = "") {
+        val preguntasItemListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                preguntas.clear()
+                for (p in snapshot.children) {
+                    val mapPregunta = p.value as Map<*, *>
+
+                    val pregunta = Pregunta(
+                        mapPregunta["id"].toString(),
+                        mapPregunta["descripcion"].toString(),
+                        mapPregunta["respuesta1"].toString(),
+                        mapPregunta["respuesta2"].toString(),
+                        mapPregunta["respuesta3"].toString(),
+                        mapPregunta["respuesta4"].toString(),
+                        mapPregunta["correcta"].toString(),
+                        "",
+                        mapPregunta["categoria"].toString()
+                    )
+                    preguntas.add(pregunta)
+                }
+                println("Size:${preguntas.size} Categoria:$categoria")
+                filtradas = aplicarFiltro(categoria, preguntas)
+                adapter = PreguntaAdapter(filtradas, this@ListaPreguntasActivity)
+                llm = LinearLayoutManager(this@ListaPreguntasActivity)
+                binding.contentPreguntas.list.layoutManager = llm
+                binding.contentPreguntas.list.adapter = adapter
+                binding.contentPreguntas.list.addItemDecoration(
+                    DividerItemDecoration(
+                        this@ListaPreguntasActivity,
+                        DividerItemDecoration.HORIZONTAL
+                    )
+                )
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "onCancelled updateList: ", error.toException())
+            }
+        }
+        Database.getPreguntasReference().addValueEventListener(preguntasItemListener)
     }
 
 
     private fun initSpinner() {
-        spFiltro = findViewById(R.id.spFiltro)
         categorias.add("")
-        categorias.add(Categoria.LECTURA_CRITICA.value)
-        categorias.add(Categoria.MATEMATICAS.value)
-        categorias.add(Categoria.SOCIALES_CIUDADANAS.value)
-        categorias.add(Categoria.CIENCIAS_NATURALES.value)
-        categorias.add(Categoria.INGLES.value)
-        spFiltro.item = categorias
+        for (categoria in Categoria.values()) {
+            categorias.add(categoria.value)
+        }
+        binding.contentPreguntas.spFiltro.item = categorias
     }
 
-    override fun onPreguntaClick(id: Int, rol:String?) {
-        val intent = Intent(this,  DetallePreguntaActivity::class.java)
-        intent.putExtra("id", id)
-        intent.putExtra("rol", rol)
-        val requestCode = 0
-        startActivityForResult(intent, requestCode)
+    private fun aplicarFiltro(
+        categoria: String,
+        preguntas: ArrayList<Pregunta>
+    ): ArrayList<Pregunta> {
+        val list = ArrayList<Pregunta>()
+        return if (categoria.isEmpty()) {
+            preguntas
+        } else {
+            for (p in preguntas) {
+                if (p.categoria == categoria) {
+                    list.add(p)
+                }
+            }
+            list
+        }
     }
-
 
 }

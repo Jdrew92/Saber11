@@ -11,7 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto">
         <activity
-            android:name=".CuestionarioActivity"
+            android:name=".activities.ListaTestsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CuestionarioActivity"
             android:exported="false" />
         <activity
             android:name=".activities.DetallePreguntaActivity"

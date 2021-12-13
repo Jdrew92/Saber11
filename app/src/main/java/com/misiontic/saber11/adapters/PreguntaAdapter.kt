@@ -1,5 +1,6 @@
 package com.misiontic.saber11.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,9 @@ import com.misiontic.saber11.R
 import com.misiontic.saber11.entities.Pregunta
 
 class PreguntaAdapter(
-    val preguntas: ArrayList<Pregunta>,
-    val clickListener: OnPreguntaClickListener
+    private val preguntas: ArrayList<Pregunta>,
+    private val clickListener: OnPreguntaClickListener,
+    val context: Context
 ) :
     RecyclerView.Adapter<PreguntaAdapter.PreguntaViewHolder>() {
 
@@ -29,8 +31,11 @@ class PreguntaAdapter(
     override fun onBindViewHolder(holder: PreguntaViewHolder, position: Int) {
         val tvDescripcion = holder.layout.findViewById<TextView>(R.id.tvDescripcionItem)
         val tvCategoria = holder.layout.findViewById<TextView>(R.id.tvCategoriaItem)
+        val tvRespuesta = holder.layout.findViewById<TextView>(R.id.tvRespuestaItem)
         tvDescripcion.text = preguntas[position].descripcion
         tvCategoria.text = preguntas[position].categoria
+        tvRespuesta.text =
+            context.getString(R.string.respuesta, preguntas[position].respuestaCorrecta)
         holder.layout.setOnClickListener { clickListener.onPreguntaClick(preguntas[position]) }
     }
 

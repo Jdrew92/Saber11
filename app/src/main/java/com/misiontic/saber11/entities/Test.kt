@@ -6,5 +6,5 @@ data class Test(
     val id: String? = null,
     val fecha: String? = null,
     val preguntas: List<Pregunta>? = null,
-    val calificacion: Any? = null
+    var calificacion: Any? = null
 ): Serializable

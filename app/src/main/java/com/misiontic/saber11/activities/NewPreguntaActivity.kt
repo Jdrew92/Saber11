@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -60,11 +59,17 @@ class NewPreguntaActivity : AppCompatActivity() {
 
     private fun guardarPregunta() {
         if(allInfoIsFilled()) {
-            val correcta = when(newPreguntaBinding.rdGroupRespuestas.checkedRadioButtonId){
+            val optCorrecta = when(newPreguntaBinding.rdGroupRespuestas.checkedRadioButtonId){
                 R.id.radBtnA -> getString(R.string.option_a)
                 R.id.radBtnB -> getString(R.string.option_b)
                 R.id.radBtnC -> getString(R.string.option_c)
                 else -> getString(R.string.option_d)
+            }
+            val correcta = when(newPreguntaBinding.rdGroupRespuestas.checkedRadioButtonId){
+                R.id.radBtnA -> newPreguntaBinding.radBtnA.text.toString()
+                R.id.radBtnB -> newPreguntaBinding.radBtnB.text.toString()
+                R.id.radBtnC -> newPreguntaBinding.radBtnC.text.toString()
+                else -> newPreguntaBinding.radBtnD.text.toString()
             }
             val pregunta = Pregunta(
                 UUID.randomUUID().toString(),
@@ -74,6 +79,7 @@ class NewPreguntaActivity : AppCompatActivity() {
                 newPreguntaBinding.edtRespuesta3.text.toString(),
                 newPreguntaBinding.edtRespuesta4.text.toString(),
                 correcta,
+                optCorrecta,
                 null,
                 newPreguntaBinding.spCategoria.selectedItem.toString()
             )
@@ -119,7 +125,7 @@ class NewPreguntaActivity : AppCompatActivity() {
                 newPreguntaBinding.edtRespuesta4.error = getString(R.string.blank_error_msg)
                 false
             }
-            newPreguntaBinding.spCategoria.selectedItem.toString().isNullOrEmpty() -> {
+            newPreguntaBinding.spCategoria.selectedItem.toString().isEmpty() -> {
                 newPreguntaBinding.spCategoria.requestFocus()
                 newPreguntaBinding.spCategoria.errorText = getString(R.string.rol_error_msg)
                 false

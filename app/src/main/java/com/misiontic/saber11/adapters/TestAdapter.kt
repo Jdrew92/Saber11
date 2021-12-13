@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.misiontic.saber11.R
 import com.misiontic.saber11.entities.Test
 
-class TestAdapter(val testList: MutableList<Test>, val clickListener: OnTestClickListener) :
+class TestAdapter(private val testList: MutableList<Test>, private val clickListener: OnTestClickListener) :
     RecyclerView.Adapter<TestAdapter.TestViewHolder>() {
 
     class TestViewHolder(val layout: View) : RecyclerView.ViewHolder(layout)

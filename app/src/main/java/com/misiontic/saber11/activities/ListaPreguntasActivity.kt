@@ -46,7 +46,7 @@ class ListaPreguntasActivity : AppCompatActivity(), PreguntaAdapter.OnPreguntaCl
     private var categorias: ArrayList<Any> = ArrayList()
     private var filtradas: ArrayList<Pregunta> = ArrayList()
 
-    private val TAG = "ListaPreguntasActivity"
+    private val tag = "ListaPreguntasActivity"
     private var user = mutableListOf<Usuario>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,6 +115,13 @@ class ListaPreguntasActivity : AppCompatActivity(), PreguntaAdapter.OnPreguntaCl
         if (toggle.onOptionsItemSelected(item)) {
             return true
         }
+        when(item.itemId){
+            R.id.app_bar_search -> {
+                val buscadas = mutableListOf<Pregunta>()
+                val buscador = item
+                Log.i("buscador", buscador.actionProvider.toString())
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -140,7 +147,6 @@ class ListaPreguntasActivity : AppCompatActivity(), PreguntaAdapter.OnPreguntaCl
             R.id.test_navItem -> {
                 val intent = Intent(this, ListaTestsActivity::class.java)
                 intent.putExtra("usuario", user[0])
-                intent.putExtra("preguntas", preguntas)
                 finish()
                 startActivity(intent)
             }
@@ -194,7 +200,7 @@ class ListaPreguntasActivity : AppCompatActivity(), PreguntaAdapter.OnPreguntaCl
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "onCancelled updateList: ", error.toException())
+                Log.e(tag, "onCancelled updateList: ", error.toException())
             }
 
         }
@@ -216,15 +222,16 @@ class ListaPreguntasActivity : AppCompatActivity(), PreguntaAdapter.OnPreguntaCl
                         mapPregunta["respuesta2"].toString(),
                         mapPregunta["respuesta3"].toString(),
                         mapPregunta["respuesta4"].toString(),
-                        mapPregunta["correcta"].toString(),
-                        "",
+                        mapPregunta["respuestaCorrecta"].toString(),
+                        mapPregunta["opcionCorrecta"].toString(),
+                        null,
                         mapPregunta["categoria"].toString()
                     )
                     preguntas.add(pregunta)
                 }
                 println("Size:${preguntas.size} Categoria:$categoria")
                 filtradas = aplicarFiltro(categoria, preguntas)
-                adapter = PreguntaAdapter(filtradas, this@ListaPreguntasActivity)
+                adapter = PreguntaAdapter(filtradas, this@ListaPreguntasActivity, this@ListaPreguntasActivity)
                 llm = LinearLayoutManager(this@ListaPreguntasActivity)
                 binding.contentPreguntas.list.layoutManager = llm
                 binding.contentPreguntas.list.adapter = adapter
@@ -237,7 +244,7 @@ class ListaPreguntasActivity : AppCompatActivity(), PreguntaAdapter.OnPreguntaCl
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "onCancelled updateList: ", error.toException())
+                Log.e(tag, "onCancelled updateList: ", error.toException())
             }
         }
         Database.getPreguntasReference().addValueEventListener(preguntasItemListener)

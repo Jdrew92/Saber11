@@ -9,7 +9,8 @@ data class Pregunta(
     val respuesta2:String? = null,
     val respuesta3:String? = null,
     val respuesta4:String? = null,
-    val correcta:String? = null,
-    val marcada:String?=null,
+    val respuestaCorrecta:String? = null,
+    val opcionCorrecta:String? = null,
+    var marcada:String?=null,
     val categoria:String? = null
 ) : Serializable

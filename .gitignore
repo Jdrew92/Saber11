@@ -183,4 +183,7 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
+# Mis ignores
+saber11-e7c27-firebase-adminsdk-r01gx-390f103e93.json
+
 # End of https://www.toptal.com/developers/gitignore/api/gradle,kotlin,androidstudio

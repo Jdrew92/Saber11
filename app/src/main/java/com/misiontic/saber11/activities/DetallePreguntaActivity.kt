@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -26,19 +28,21 @@ class DetallePreguntaActivity : AppCompatActivity() {
     private var categorias: ArrayList<Any> = ArrayList()
     private lateinit var detalleBinding: ActivityDetallePreguntaBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var pregunta:Pregunta
 
-    private val TAG = "DetallePreguntaACtivity"
+    private val tag = "DetallePreguntaActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         detalleBinding = ActivityDetallePreguntaBinding.inflate(layoutInflater)
         setContentView(detalleBinding.root)
+        setSupportActionBar(findViewById(R.id.toolbar_detalle))
 
         auth = Firebase.auth
         Firebase.initialize(this)
 
         initSpinner()
-        val pregunta = intent.extras!!.get("pregunta") as Pregunta
+        pregunta = intent.extras!!.get("pregunta") as Pregunta
         requestData(pregunta)
 
         disableAll()
@@ -56,13 +60,18 @@ class DetallePreguntaActivity : AppCompatActivity() {
                 getString(R.string.guardar_cambios) -> {
                     if (allInfoIsFilled()) {
 
-                        val correcta =
-                            when (detalleBinding.rdGroupRespuestasDetalle.checkedRadioButtonId) {
-                                R.id.radBtnADetalle -> getString(R.string.option_a)
-                                R.id.radBtnBDetalle -> getString(R.string.option_b)
-                                R.id.radBtnCDetalle -> getString(R.string.option_c)
-                                else -> getString(R.string.option_d)
-                            }
+                        val optCorrecta = when(detalleBinding.rdGroupRespuestasDetalle.checkedRadioButtonId){
+                            R.id.radBtnA -> getString(R.string.option_a)
+                            R.id.radBtnB -> getString(R.string.option_b)
+                            R.id.radBtnC -> getString(R.string.option_c)
+                            else -> getString(R.string.option_d)
+                        }
+                        val correcta = when(detalleBinding.rdGroupRespuestasDetalle.checkedRadioButtonId){
+                            R.id.radBtnA -> detalleBinding.radBtnADetalle.text.toString()
+                            R.id.radBtnB -> detalleBinding.radBtnBDetalle.text.toString()
+                            R.id.radBtnC -> detalleBinding.radBtnCDetalle.text.toString()
+                            else -> detalleBinding.radBtnDDetalle.text.toString()
+                        }
                         val p = Pregunta(
                             pregunta.id,
                             detalleBinding.edtDescripcionDetalle.text.toString(),
@@ -71,6 +80,8 @@ class DetallePreguntaActivity : AppCompatActivity() {
                             detalleBinding.edtRespuesta3Detalle.text.toString(),
                             detalleBinding.edtRespuesta4Detalle.text.toString(),
                             correcta,
+                            optCorrecta,
+                            null,
                             detalleBinding.spCategoriaDetalle.selectedItem.toString()
                         )
                         Database.getPreguntasReference().child(p.id!!).setValue(p)
@@ -95,6 +106,24 @@ class DetallePreguntaActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_detalle, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.ItemDelete -> {
+                Database.getPreguntasReference().child(pregunta.id!!).removeValue()
+                Toast.makeText(this, "Se eliminó la pregunta con éxito", Toast.LENGTH_LONG).show()
+                val intent = Intent(this, ListaPreguntasActivity::class.java)
+                finish()
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun toListaPreguntas() {
         val intent = Intent(this, ListaPreguntasActivity::class.java)
         finish()
@@ -115,7 +144,7 @@ class DetallePreguntaActivity : AppCompatActivity() {
                 detalleBinding.edtRespuesta2Detalle.setText(pregunta.respuesta2)
                 detalleBinding.edtRespuesta3Detalle.setText(pregunta.respuesta3)
                 detalleBinding.edtRespuesta4Detalle.setText(pregunta.respuesta4)
-                val correcta = when(pregunta.correcta){
+                val correcta = when(pregunta.opcionCorrecta){
                     getString(R.string.option_a)->R.id.radBtnADetalle
                     getString(R.string.option_b)->R.id.radBtnBDetalle
                     getString(R.string.option_c)->R.id.radBtnCDetalle
@@ -221,7 +250,7 @@ class DetallePreguntaActivity : AppCompatActivity() {
                 }
             }
             override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "onCancelled updateList: ", error.toException())
+                Log.e(tag, "onCancelled updateList: ", error.toException())
             }
 
         }

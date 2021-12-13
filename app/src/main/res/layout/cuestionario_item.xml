@@ -33,45 +33,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <LinearLayout
+                <RadioButton
+                    android:id="@+id/rbRespuestaA"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:text="@string/answer_a" />
 
-                    <RadioButton
-                        android:id="@+id/rbRespuestaA"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:text="Respuesta A" />
-
-                    <RadioButton
-                        android:id="@+id/rbRespuestaB"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:text="Respuesta B" />
-                </LinearLayout>
-
-                <LinearLayout
+                <RadioButton
+                    android:id="@+id/rbRespuestaB"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/answer_b" />
 
-                    <RadioButton
-                        android:id="@+id/rbRespuestaC"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:text="Respuesta C" />
+                <RadioButton
+                    android:id="@+id/rbRespuestaC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/answer_c" />
 
-                    <RadioButton
-                        android:id="@+id/rbRespuestaD"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:text="Respuesta D" />
-                </LinearLayout>
+                <RadioButton
+                    android:id="@+id/rbRespuestaD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/answer_d" />
 
             </RadioGroup>
         </LinearLayout>

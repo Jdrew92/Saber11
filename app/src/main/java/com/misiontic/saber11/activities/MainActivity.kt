@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
-    private val TAG = "MainActivity"
+    private val tag = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
-        Log.i(TAG,"currentUser onStart: $currentUser")
+        Log.i(tag,"currentUser onStart: $currentUser")
         if (currentUser != null) {
            toListaPreguntas()
          }

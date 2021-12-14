@@ -95,7 +95,7 @@ captures/
 *.ipr
 *~
 *.swp
-
+/*/release/
 # Keystore files
 *.jks
 *.keystore

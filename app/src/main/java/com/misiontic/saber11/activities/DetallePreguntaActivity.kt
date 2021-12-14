@@ -61,16 +61,16 @@ class DetallePreguntaActivity : AppCompatActivity() {
                     if (allInfoIsFilled()) {
 
                         val optCorrecta = when(detalleBinding.rdGroupRespuestasDetalle.checkedRadioButtonId){
-                            R.id.radBtnA -> getString(R.string.option_a)
-                            R.id.radBtnB -> getString(R.string.option_b)
-                            R.id.radBtnC -> getString(R.string.option_c)
+                            R.id.radBtnADetalle -> getString(R.string.option_a)
+                            R.id.radBtnBDetalle -> getString(R.string.option_b)
+                            R.id.radBtnCDetalle -> getString(R.string.option_c)
                             else -> getString(R.string.option_d)
                         }
                         val correcta = when(detalleBinding.rdGroupRespuestasDetalle.checkedRadioButtonId){
-                            R.id.radBtnA -> detalleBinding.radBtnADetalle.text.toString()
-                            R.id.radBtnB -> detalleBinding.radBtnBDetalle.text.toString()
-                            R.id.radBtnC -> detalleBinding.radBtnCDetalle.text.toString()
-                            else -> detalleBinding.radBtnDDetalle.text.toString()
+                            R.id.radBtnADetalle -> detalleBinding.edtRespuesta1Detalle.text.toString()
+                            R.id.radBtnBDetalle -> detalleBinding.edtRespuesta2Detalle.text.toString()
+                            R.id.radBtnCDetalle -> detalleBinding.edtRespuesta3Detalle.text.toString()
+                            else -> detalleBinding.edtRespuesta4Detalle.text.toString()
                         }
                         val p = Pregunta(
                             pregunta.id,

@@ -66,10 +66,10 @@ class NewPreguntaActivity : AppCompatActivity() {
                 else -> getString(R.string.option_d)
             }
             val correcta = when(newPreguntaBinding.rdGroupRespuestas.checkedRadioButtonId){
-                R.id.radBtnA -> newPreguntaBinding.radBtnA.text.toString()
-                R.id.radBtnB -> newPreguntaBinding.radBtnB.text.toString()
-                R.id.radBtnC -> newPreguntaBinding.radBtnC.text.toString()
-                else -> newPreguntaBinding.radBtnD.text.toString()
+                R.id.radBtnA -> newPreguntaBinding.edtRespuesta1.text.toString()
+                R.id.radBtnB -> newPreguntaBinding.edtRespuesta2.text.toString()
+                R.id.radBtnC -> newPreguntaBinding.edtRespuesta3.text.toString()
+                else -> newPreguntaBinding.edtRespuesta4.text.toString()
             }
             val pregunta = Pregunta(
                 UUID.randomUUID().toString(),
